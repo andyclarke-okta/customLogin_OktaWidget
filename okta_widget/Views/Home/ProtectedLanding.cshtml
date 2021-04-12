@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "ProtectedLanding";
+}
+
+<h2>Protected Landing</h2>
+<p>User is both authenticated and authorized to use this app</p>
+
+
+<div>
+    <p> Sign Out button will initiate Server Side sign out of both local app and Okta session</p>
+    <p> The appllication can also call a Backend Web API with accessToken</p>
+    <form class="form-inline" asp-controller="Home" asp-action="SendApi" method="post">
+        <button type="submit" class="nav-link btn btn-link text-dark" id="logout-button">Call API</button>
+    </form>
+
+
+</div>

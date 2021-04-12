@@ -1,0 +1,93 @@
+﻿
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = "Authn Login";
+}
+
+<script src="https://global.oktacdn.com/okta-signin-widget/@Configuration["OktaSpa:WidgetVersion"]/js/okta-sign-in.min.js" type="text/javascript"></script>
+<link href="https://global.oktacdn.com/okta-signin-widget/@Configuration["OktaSpa:WidgetVersion"]/css/okta-sign-in.min.css" type="text/css" rel="stylesheet" />
+<h2>Sign In</h2>
+
+<div id="okta-login-container"></div>
+
+
+<script type="text/javascript">
+
+
+        var myOktaOrg = '@Configuration["OktaSpa:OktaDomain"]';
+        var clientId = '@Configuration["OktaSpa:ClientId"]';
+    var myIssuer = '@Configuration["OktaSpa:Authority"]';
+        var authorizationServerId = '@Configuration["OktaSpa:AuthorizationServerId"]';
+        //var redirectUri = '@Configuration["OktaSpa:RedirectUri"]';
+         var redirectUri = "@TempData["redirectUri"]";
+        var myLocation = "none";
+        var landing = "/Home/UnprotectedLanding"
+
+ 
+
+
+         var options = {
+            baseUrl: myOktaOrg,
+            logo: "/img/logo_acme.png",
+            features: {
+                router: true,
+                rememberMe: false,
+                smsRecovery: true,
+                multiOptionalFactorEnroll: true
+
+             },
+            i18n: {
+                // Overriding English properties
+                'en': {
+                    'primaryauth.title': 'Sign in to Acme',
+                    'primaryauth.username.placeholder': 'Your Acme Username'
+                }
+             },
+                    // OIDC options
+            //clientId: clientId,
+            //redirectUri: redirectUri,
+
+            helpLinks: {
+                help: "/Home/Help"
+             },
+            el: '#okta-login-container'
+        };
+        var oktaSignIn = new OktaSignIn(options);
+
+        function showLoginWidget() {
+            oktaSignIn.showSignInToGetTokens(
+                {
+                    clientId: clientId,
+                    redirectUri: redirectUri,
+                    authorizationServerId: authorizationServerId,
+                    scope: ['openid', 'profile'],
+                    // Return an access token from the authorization server
+                    getAccessToken: true,
+
+                    // Return an ID token from the authorization server
+                    getIdToken: true
+                },
+                function (res) {
+                    debugger;
+                    console.log("success");
+                },
+                function (err) {
+                    console.log("failure");
+                }
+            )     
+        }//end of function
+
+            debugger;
+            showLoginWidget();
+
+
+
+        console.log('oktaSignIn: ', oktaSignIn);
+        console.log('Auth: ', myOktaOrg);
+
+
+
+
+</script>
